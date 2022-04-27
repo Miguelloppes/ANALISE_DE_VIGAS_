@@ -25,7 +25,7 @@ IN(1,1:nEL) = [1 2];
 IN(2,1:nEL) = [2 3];
 % Matriz de Propriedades (PROP)
 PROP = zeros(6,nEL);
-PROP(1,1:nEL) = [0.15 0.15];% Comprimento dos elementos
+PROP(1,1:nEL) = [0.3 0.3];% Comprimento dos elementos
 PROP(6,1:nEL) = [0 90]; % Ângulo de inclinação dos elementos
 % Vetor de carregamentos externos
 F = zeros(nGLmax,1);
