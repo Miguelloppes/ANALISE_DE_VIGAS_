@@ -3,8 +3,8 @@ clearvars; clc;
 % ENTRADA DE DADOS DA ESTRUTURA
 %============================================================================
 nEL = 2; % Quantidade total de elementos
-nNO = 3; % Quantidade total de nós
-nGL = 3; % Quantidade GL por nó
+nNO = 3; % Quantidade total de nÃ³s
+nGL = 3; % Quantidade GL por nÃ³
 nGLmax = 9; % Maior valor de GL
 alpha = 1:5; % GLs desconhecidos
 beta = 6:nGLmax; % GLs conhecidos (fixos ou prescritos)
@@ -12,6 +12,7 @@ beta = 6:nGLmax; % GLs conhecidos (fixos ou prescritos)
 K = 1; % Elementos de mola
 AE = 5; % Elementos de barra
 EI = 2; % Elementos de viga
+%Forcas aplicadas:
 F1 = 10;
 % Tipos de elemento
 ET = ['P' 'P' 'P'];
@@ -19,13 +20,13 @@ ET = ['P' 'P' 'P'];
 ID(1,1:nNO) = [7 6 1];
 ID(2,1:nNO) = [8 4 2];
 ID(3,1:nNO) = [9 5 3];
-% Matriz de Incidência (IN)
+% Matriz de IncidÃªncia (IN)
 IN(1,1:nEL) = [1 2];
 IN(2,1:nEL) = [2 3];
 % Matriz de Propriedades (PROP)
 PROP = zeros(6,nEL);
 PROP(1,1:nEL) = [0.15 0.15];% Comprimento dos elementos
-PROP(6,1:nEL) = [0 90]; % Ângulo de inclinação dos elementos
+PROP(6,1:nEL) = [0 90]; % Ã‚ngulo de inclinaÃ§Ã£o dos elementos
 % Vetor de carregamentos externos
 F = zeros(nGLmax,1);
 %Forca 1
@@ -37,10 +38,10 @@ COORD(1,1:nNO) = 1e3*[0 1 1]; % Coord. X
 COORD(2,1:nNO) = 1e3*[0 0 1]; % Coord. Y
 escala = 50;
 %============================================================================
-% CÁLCULO DO MEF
+% CÃLCULO DO MEF
 %============================================================================
 
-% Matriz de Localização (LM)
+% Matriz de LocalizaÃ§Ã£o (LM)
 LM = MontaMatrizLM(nEL, nGL, ID, IN, ET);
 % Matriz de Propriedades (PROP)
 PROP = CalculaPropriedades(PROP, ET, K, AE, EI);
@@ -52,11 +53,11 @@ for el = 1:nEL
  ind = 1 : length(nonzeros(LM(:,el)));
  Kg(LM(ind,el),LM(ind,el)) = Kg(LM(ind,el),LM(ind,el)) + Ke(ind,ind,el);
 end
-% Verifica se a solução existe e é única
-det(Kg(alpha,alpha)); % É diferente de zero -> OK!
-% Solução dos GLs desconhecidos
+% Verifica se a soluÃ§Ã£o existe e Ã© Ãºnica
+det(Kg(alpha,alpha)); % Ã‰ diferente de zero -> OK!
+% SoluÃ§Ã£o dos GLs desconhecidos
 X(alpha) = Kg(alpha,alpha) \ (F(alpha)-Kg(alpha,beta)*X(beta))
-% Cálculo das reações de apoio
+% CÃ¡lculo das reaÃ§Ãµes de apoio
 F(beta) = Kg(beta,alpha)*X(alpha) + Kg(beta,beta)*X(beta)
 %==========================================
 % PLOTAGEM
@@ -64,7 +65,7 @@ F(beta) = Kg(beta,alpha)*X(alpha) + Kg(beta,beta)*X(beta)
 figure(1);
 clf(1);
 hold on;
-% Plota os nós
+% Plota os nÃ³s
 for i = 1 : nNO
  plot(COORD(1,i), COORD(2,i), 'bo');
 end
@@ -76,7 +77,7 @@ end
 % Geometria deformada
 DEF(1,:) = COORD(1,:) + escala*X(ID(1,:))';
 DEF(2,:) = COORD(2,:) + escala*X(ID(2,:))';
-% Plota os nós deslocados
+% Plota os nÃ³s deslocados
 for i = 1 : nNO
  plot(DEF(1,i), DEF(2,i), 'ro');
 end
